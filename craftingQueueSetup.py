@@ -52,7 +52,7 @@ for archetype, classes in archetypes.items():
             xml_content += f'<Setting Name="{spell} (Expert)">1</Setting>\n'
         xml_content += "</InnerSpaceSettings>\n"
 
-        file_path = os.path.join(archetype_folder, f'{class_name}_81-89.xml')
+        file_path = os.path.join(archetype_folder, f'{class_name}_126-130.xml')
         with open(file_path, 'w') as file:
             file.write(xml_content)
 
