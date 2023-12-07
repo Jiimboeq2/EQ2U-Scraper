@@ -2,6 +2,8 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+
+#==================================================================================================
 # Archetypes with their corresponding classes
 archetypes = {
     "Mage": ["Coercer", "Conjuror", "Illusionist", "Necromancer", "Warlock", "Wizard"],
@@ -9,6 +11,7 @@ archetypes = {
     "Scout": ["Assassin", "Beastlord", "Brigand", "Dirge", "Ranger", "Swashbuckler", "Troubador"],
     "Fighter": ["Berserker", "Bruiser", "Guardian", "Monk", "Paladin", "Shadowknight"]
 }
+#==================================================================================================
 
 def scrape_spells(class_name):
     url = f"https://u.eq2wire.com/spells/list_spells/{class_name}"
@@ -22,7 +25,7 @@ def scrape_spells(class_name):
             level_cell = cells[0].get_text().strip()
             if level_cell.isdigit():
                 level = int(level_cell)
-                if 80 <= level <= 89:
+                if 126 <= level <= 130:
                     spell_name_tag = row.find('div', class_='spell_name').find('a')
                     if spell_name_tag:  # Check if the tag is not None
                         spell_name = spell_name_tag.get_text()
@@ -30,6 +33,7 @@ def scrape_spells(class_name):
 
     return filtered_spells
 
+#==================================================================================================
 # Get Desktop path for any user
 desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 
@@ -37,6 +41,7 @@ desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 for archetype, classes in archetypes.items():
     archetype_folder = os.path.join(desktop, archetype)
     os.makedirs(archetype_folder, exist_ok=True)
+#==================================================================================================
 
     for class_name in classes:
         spells = scrape_spells(class_name)
