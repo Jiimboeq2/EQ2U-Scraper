@@ -2,8 +2,6 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-
-#==================================================================================================
 # Archetypes with their corresponding classes
 archetypes = {
     "Mage": ["Coercer", "Conjuror", "Illusionist", "Necromancer", "Warlock", "Wizard"],
@@ -11,7 +9,6 @@ archetypes = {
     "Scout": ["Assassin", "Beastlord", "Brigand", "Dirge", "Ranger", "Swashbuckler", "Troubador"],
     "Fighter": ["Berserker", "Bruiser", "Guardian", "Monk", "Paladin", "Shadowknight"]
 }
-#==================================================================================================
 
 def scrape_spells(class_name):
     url = f"https://u.eq2wire.com/spells/list_spells/{class_name}"
@@ -27,22 +24,18 @@ def scrape_spells(class_name):
                 level = int(level_cell)
                 if 126 <= level <= 130:
                     spell_name_tag = row.find('div', class_='spell_name').find('a')
-                    if spell_name_tag:  # Check if the tag is not None
+                    if spell_name_tag:
                         spell_name = spell_name_tag.get_text()
                         filtered_spells.append(spell_name)
 
     return filtered_spells
 
-#==================================================================================================
-# Get Desktop path for any user
-desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+# Set the target directory , change if needed
+target_directory = r"C:\Program Files (x86)\InnerSpace\Scripts\EQ2OgreCraft\RecipeQueues"
+os.makedirs(target_directory, exist_ok=True)
 
-# Create folders for each archetype on the desktop and save the files
+# Scrape spells and save the files
 for archetype, classes in archetypes.items():
-    archetype_folder = os.path.join(desktop, archetype)
-    os.makedirs(archetype_folder, exist_ok=True)
-#==================================================================================================
-
     for class_name in classes:
         spells = scrape_spells(class_name)
         xml_content = "<?xml version='1.0' encoding='UTF-8'?>\n"
@@ -52,7 +45,7 @@ for archetype, classes in archetypes.items():
             xml_content += f'<Setting Name="{spell} (Expert)">1</Setting>\n'
         xml_content += "</InnerSpaceSettings>\n"
 
-        file_path = os.path.join(archetype_folder, f'{class_name}_126-130.xml')
+        file_path = os.path.join(target_directory, f'{class_name}_126-130.xml')
         with open(file_path, 'w') as file:
             file.write(xml_content)
 
